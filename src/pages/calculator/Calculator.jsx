@@ -55,18 +55,17 @@ export default class Calculadora extends Component {
           } else {
             values[0] = this.state.values[0];
           }
+
+          values[1] = 0;
+          const displayValue = values[0].toString();
+          this.setState({
+            values,
+            displayValue,
+            operation: equals ? null : operation,
+            current: equals ? 0 : 1,
+            clearDisplay: !equals
+          });
       }
-
-      values[1] = 0;
-      const displayValue = values[0].toString();
-      this.setState({
-        values,
-        displayValue,
-        operation: equals ? null : operation,
-        current: equals ? 0 : 1,
-        clearDisplay: !equals
-      });
-
     }
   }
 
@@ -78,7 +77,11 @@ export default class Calculadora extends Component {
     const clearDisplay = (this.state.displayValue === '0' && n !== '.') 
           || this.state.clearDisplay;
     const currentValue = clearDisplay ? '' : this.state.displayValue.toString();
-    const displayValue = (currentValue + n).toString();
+    const displayValue = 
+    this.state.values[1] === 0 && 
+    this.state.current === 1 &&
+    parseFloat(this.state.displayValue) > 0
+    ? '0'+(currentValue + n).toString()  : (currentValue + n).toString() ;
 
     this.setState({displayValue, clearDisplay: false});
 
